@@ -72,3 +72,4 @@ Compatible with n8n@1.60.0 or later
 * [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
 * [GitHub API docs](https://docs.github.com/en/rest/issues)
 
+
