@@ -1,4 +1,28 @@
-import type { INodeProperties } from 'n8n-workflow';
+import { NodeOperationError } from 'n8n-workflow';
+import type {
+	IExecuteSingleFunctions,
+	IHttpRequestOptions,
+	INodeProperties,
+} from 'n8n-workflow';
+
+// Guards the Tadfoq API rule that a button message must carry 1–3 buttons.
+async function validateButtons(
+	this: IExecuteSingleFunctions,
+	requestOptions: IHttpRequestOptions,
+): Promise<IHttpRequestOptions> {
+	const body = requestOptions.body as { buttons?: unknown[] } | undefined;
+	const buttons = Array.isArray(body?.buttons) ? body.buttons : [];
+
+	if (buttons.length < 1 || buttons.length > 3) {
+		throw new NodeOperationError(
+			this.getNode(),
+			'Button messages require 1–3 buttons',
+			{ description: `You provided ${buttons.length}. Add between 1 and 3 buttons.` },
+		);
+	}
+
+	return requestOptions;
+}
 
 // ── Common fields (shown for all message operations) ────────────────────
 
@@ -11,10 +35,8 @@ const commonMessageFields: INodeProperties[] = [
 	{
 		displayName: 'Store ID',
 		name: 'storeId',
-		type: 'string',
-		required: true,
-		default: '',
-		placeholder: 'e.g. 00000000-0000-0000-0000-000000000000',
+		type: 'hidden',
+		default: '7ebf0309-6c0b-476d-8af3-607eddd14663',
 		description: 'The merchant-owned store for the conversation',
 		displayOptions: { show: showOnlyForAllMessages },
 		routing: {
@@ -22,8 +44,7 @@ const commonMessageFields: INodeProperties[] = [
 		},
 	},
 	{
-		// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-options
-		displayName: 'Number',
+		displayName: 'Number Name or ID',
 		name: 'numberId',
 		type: 'options',
 		required: true,
@@ -98,8 +119,8 @@ const sendButtonFields: INodeProperties[] = [
 		required: true,
 		default: {},
 		placeholder: 'Add Button',
-		typeOptions: { multipleValues: true, maxValue: 3 },
-		description: 'Up to 3 quick-reply buttons',
+		typeOptions: { multipleValues: true, maxValue: 3, sortable: true },
+		description: 'Between 1 and 3 quick-reply buttons',
 		displayOptions: { show: showOnlyForSendButton },
 		options: [
 			{
@@ -129,6 +150,7 @@ const sendButtonFields: INodeProperties[] = [
 				type: 'body',
 				property: 'buttons',
 				value: '={{$value.values}}',
+				preSend: [validateButtons],
 			},
 		},
 	},
@@ -250,13 +272,12 @@ const showOnlyForSendTemplate = { resource: ['message'], operation: ['sendTempla
 
 const sendTemplateFields: INodeProperties[] = [
 	{
-		// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-options
-		displayName: 'Template Name',
+		displayName: 'Template Name or ID',
 		name: 'templateName',
 		type: 'options',
 		required: true,
 		default: '',
-		description: 'Choose from the list, or specify a value using an <a href="https://docs.n8n.io/code/expressions/">expression</a>. The template must be approved for the selected number. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
+		description: 'The template must be approved for the selected number. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 		typeOptions: {
 			loadOptionsMethod: 'getTemplates',
 			loadOptionsDependsOn: ['numberId'],

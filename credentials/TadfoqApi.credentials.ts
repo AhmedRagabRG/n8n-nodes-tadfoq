@@ -11,7 +11,10 @@ export class TadfoqApi implements ICredentialType {
 
 	displayName = 'Tadfoq API';
 
-	icon: Icon = 'file:../icons/logo.svg';
+	icon: Icon = {
+		light: 'file:../icons/logo.svg',
+		dark: 'file:../icons/logo.dark.svg',
+	};
 
 	documentationUrl = 'https://staging.tadfoq.com/api/merchant/reference';
 

@@ -8,7 +8,10 @@ export class Tadfoq implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Tadfoq',
 		name: 'tadfoq',
-		icon: 'file:../../icons/logo.svg',
+		icon: {
+			light: 'file:../../icons/logo.svg',
+			dark: 'file:../../icons/logo.dark.svg',
+		},
 		group: ['output'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',

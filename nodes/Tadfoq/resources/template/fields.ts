@@ -4,8 +4,7 @@ const showOnlyForTemplateGetAll = { resource: ['template'], operation: ['getAll'
 
 export const templateFields: INodeProperties[] = [
 	{
-		// eslint-disable-next-line n8n-nodes-base/node-param-display-name-wrong-for-dynamic-options
-		displayName: 'Number',
+		displayName: 'Number Name or ID',
 		name: 'numberId',
 		type: 'options',
 		required: true,
