@@ -16,7 +16,7 @@ export class TadfoqApi implements ICredentialType {
 		dark: 'file:../icons/logo.dark.svg',
 	};
 
-	documentationUrl = 'https://staging.tadfoq.com/api/merchant/reference';
+	documentationUrl = 'https://merchant.tadfoq.com/api/merchant/reference';
 
 	properties: INodeProperties[] = [
 		{
@@ -42,7 +42,7 @@ export class TadfoqApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'https://staging.tadfoq.com',
+			baseURL: 'https://merchant.tadfoq.com',
 			url: '/api/merchant/whatsapp/numbers',
 			method: 'GET',
 		},

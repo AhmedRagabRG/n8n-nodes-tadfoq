@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "n8n community node to send WhatsApp messages through Tadfoq",
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://merchant.tadfoq.com/api/merchant/reference",
   "keywords": [
     "n8n-community-node-package"
   ],

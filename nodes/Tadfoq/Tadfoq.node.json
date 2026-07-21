@@ -1,12 +1,12 @@
 {
-	"node": "n8n-nodes-base.tadfoq",
+	"node": "n8n-nodes-tadfoq.tadfoq",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Communication"],
 	"resources": {
 		"primaryDocumentation": [
 			{
-				"url": "https://staging.tadfoq.com/api/merchant/reference"
+				"url": "https://merchant.tadfoq.com/api/merchant/reference"
 			}
 		]
 	}

@@ -1,77 +1,149 @@
 # n8n-nodes-tadfoq
 
-This is an n8n community node. It lets you use GitHub Issues in your n8n workflows.
+This is an n8n community node for [Tadfoq](https://merchant.tadfoq.com). It allows you to send WhatsApp messages, retrieve linked WhatsApp numbers, and manage message templates in your n8n workflows.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
 
-[Installation](#installation)
-[Operations](#operations)
-[Credentials](#credentials)
-[Compatibility](#compatibility)
-[Usage](#usage)
-[Resources](#resources)
+## Table of Contents
+
+- [Installation](#installation)
+- [Credentials](#credentials)
+- [Resources & Operations](#resources--operations)
+- [Usage Examples](#usage-examples)
+  - [WhatsApp Number Operations](#whatsapp-number-operations)
+  - [Template Operations](#template-operations)
+  - [Message Operations](#message-operations)
+- [Compatibility](#compatibility)
+- [Resources](#resources)
+
+---
 
 ## Installation
 
 Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
 
-## Operations
+In your n8n instance:
+1. Go to **Settings > Community Nodes**.
+2. Select **Install**.
+3. Enter `n8n-nodes-tadfoq` in the **npm Package Name** field.
+4. Agree to the risks and select **Install**.
 
-- Issues
-    - Get an issue
-    - Get many issues in a repository
-    - Create a new issue
-- Issue Comments
-    - Get many issue comments
+---
 
 ## Credentials
 
-You can use either access token or OAuth2 to use this node.
+To use this node, you need a **Tadfoq API Key**:
 
-### Access token
+1. Log into your [Tadfoq Merchant Account](https://merchant.tadfoq.com).
+2. Go to **Settings > API Access**.
+3. Click **Create Key** (e.g., `n8n Integration`).
+4. Copy the generated API Key (format: `tdf_live_...`). Note that secret keys are shown only once.
+5. In n8n, create a new credential for **Tadfoq API** and paste your API Key.
 
-1. Open your GitHub profile [Settings](https://github.com/settings/profile).
-2. In the left navigation, select [Developer settings](https://github.com/settings/apps).
-3. In the left navigation, under Personal access tokens, select Tokens (classic).
-4. Select Generate new token > Generate new token (classic).
-5. Enter a descriptive name for your token in the Note field, like n8n integration.
-6. Select the Expiration you'd like for the token, or select No expiration.
-7. Select Scopes for your token. For most of the n8n GitHub nodes, add the `repo` scope.
-    - A token without assigned scopes can only access public information.
-8. Select Generate token.
-9. Copy the token.
+For full API documentation, refer to the [Tadfoq Merchant API Reference](https://merchant.tadfoq.com/api/merchant/reference).
 
-Refer to [Creating a personal access token (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) for more information. Refer to Scopes for OAuth apps for more information on GitHub scopes.
+---
 
-![Generated Access token in GitHub](https://docs.github.com/assets/cb-17251/mw-1440/images/help/settings/personal-access-tokens.webp)
+## Resources & Operations
 
-### OAuth2
+### 1. WhatsApp Number (`whatsappNumber`)
+- **Get Many** (`getAll`): Retrieve a list of all linked WhatsApp numbers for your merchant account.
 
-If you're self-hosting n8n, create a new GitHub [OAuth app](https://docs.github.com/en/apps/oauth-apps):
+### 2. Template (`template`)
+- **Get Many** (`getAll`): Retrieve all approved WhatsApp message templates for a specified WhatsApp number.
 
-1. Open your GitHub profile [Settings](https://github.com/settings/profile).
-2. In the left navigation, select [Developer settings](https://github.com/settings/apps).
-3. In the left navigation, select OAuth apps.
-4. Select New OAuth App.
-    - If you haven't created an app before, you may see Register a new application instead. Select it.
-5. Enter an Application name, like n8n integration.
-6. Enter the Homepage URL for your app's website.
-7. If you'd like, add the optional Application description, which GitHub displays to end-users.
-8. From n8n, copy the OAuth Redirect URL and paste it into the GitHub Authorization callback URL.
-9. Select Register application.
-10. Copy the Client ID and Client Secret this generates and add them to your n8n credential.
+### 3. Message (`message`)
+- **Send Text** (`sendText`): Send a plain text message to a recipient.
+- **Send Button** (`sendButton`): Send an interactive button message (with quick reply or call-to-action buttons).
+- **Send List** (`sendList`): Send an interactive list message (with selectable options).
+- **Send Template** (`sendTemplate`): Send an approved WhatsApp template message with optional variable parameters.
 
-Refer to the [GitHub Authorizing OAuth apps documentation](https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps) for more information on the authorization process.
+---
+
+## Usage Examples
+
+### WhatsApp Number Operations
+
+#### Get Many (`getAll`)
+Retrieve all WhatsApp numbers linked to your Tadfoq account.
+
+* **Resource**: `WhatsApp Number`
+* **Operation**: `Get Many`
+* **Output**: Returns an array of linked WhatsApp numbers including phone number IDs, phone numbers, and status.
+
+---
+
+### Template Operations
+
+#### Get Many (`getAll`)
+Fetch approved WhatsApp message templates for a specific connected number.
+
+* **Resource**: `Template`
+* **Operation**: `Get Many`
+* **WhatsApp Number ID**: Select from dropdown or pass dynamically (e.g. `{{ $json.phoneNumberId }}`)
+* **Output**: Returns an array of template objects containing template names, languages, components, and approval status.
+
+---
+
+### Message Operations
+
+#### 1. Send Text (`sendText`)
+Send a standard text message.
+
+* **Resource**: `Message`
+* **Operation**: `Send Text`
+* **WhatsApp Number ID**: Select or specify the sending WhatsApp Number ID.
+* **Recipient Phone Number**: `966500000000` (E.164 format without `+`).
+* **Text**: `Hello! Your order #12345 has been confirmed.`
+
+#### 2. Send Button (`sendButton`)
+Send a message with quick reply interactive buttons.
+
+* **Resource**: `Message`
+* **Operation**: `Send Button`
+* **WhatsApp Number ID**: Select or specify the sending WhatsApp Number ID.
+* **Recipient Phone Number**: `966500000000`
+* **Body Text**: `Would you like to confirm your appointment?`
+* **Buttons**:
+  - Button 1 Title: `Confirm`
+  - Button 2 Title: `Reschedule`
+
+#### 3. Send List (`sendList`)
+Send an interactive menu/list selection message.
+
+* **Resource**: `Message`
+* **Operation**: `Send List`
+* **WhatsApp Number ID**: Select or specify the sending WhatsApp Number ID.
+* **Recipient Phone Number**: `966500000000`
+* **Body Text**: `Please select a service from our main menu:`
+* **Button Text**: `View Menu`
+* **Sections**:
+  - **Section Title**: `Customer Support`
+    - Option 1 ID: `opt_tech_support`, Title: `Technical Support`, Description: `Get help with technical issues`
+    - Option 2 ID: `opt_billing`, Title: `Billing & Invoices`, Description: `Questions about payment`
+
+#### 4. Send Template (`sendTemplate`)
+Send a pre-approved Meta/WhatsApp template message.
+
+* **Resource**: `Message`
+* **Operation**: `Send Template`
+* **WhatsApp Number ID**: Select or specify the sending WhatsApp Number ID.
+* **Recipient Phone Number**: `966500000000`
+* **Template**: Select from available templates (e.g., `order_update`).
+* **Language Code**: `en` (or `ar`)
+* **Variables / Parameters** (Optional):
+  - Header parameters or Body parameters matching your template placeholders (e.g., `{{1}}` -> `Ahmed`).
+
+---
 
 ## Compatibility
 
-Compatible with n8n@1.60.0 or later
+Compatible with **n8n@1.60.0** or later.
+
+---
 
 ## Resources
 
-* [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
-* [GitHub API docs](https://docs.github.com/en/rest/issues)
-
-
-
-
+* [n8n Community Nodes Documentation](https://docs.n8n.io/integrations/#community-nodes)
+* [Tadfoq API Reference](https://merchant.tadfoq.com/api/merchant/reference)
+* [Tadfoq Merchant Portal](https://merchant.tadfoq.com)

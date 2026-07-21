@@ -29,7 +29,7 @@ export class Tadfoq implements INodeType {
 			},
 		],
 		requestDefaults: {
-			baseURL: 'https://staging.tadfoq.com',
+			baseURL: 'https://merchant.tadfoq.com',
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',

@@ -22,7 +22,7 @@ export async function getWhatsAppNumbers(
 ): Promise<INodePropertyOptions[]> {
 	const options: IHttpRequestOptions = {
 		method: 'GET',
-		url: 'https://staging.tadfoq.com/api/merchant/whatsapp/numbers',
+		url: 'https://merchant.tadfoq.com/api/merchant/whatsapp/numbers',
 		json: true,
 	};
 
@@ -51,7 +51,7 @@ export async function getTemplates(
 
 	const options: IHttpRequestOptions = {
 		method: 'GET',
-		url: 'https://staging.tadfoq.com/api/merchant/whatsapp/templates',
+		url: 'https://merchant.tadfoq.com/api/merchant/whatsapp/templates',
 		qs: { number_id: numberId },
 		json: true,
 	};

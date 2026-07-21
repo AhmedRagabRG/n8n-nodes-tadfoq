@@ -33,17 +33,6 @@ const showOnlyForAllMessages = {
 
 const commonMessageFields: INodeProperties[] = [
 	{
-		displayName: 'Store ID',
-		name: 'storeId',
-		type: 'hidden',
-		default: '7ebf0309-6c0b-476d-8af3-607eddd14663',
-		description: 'The merchant-owned store for the conversation',
-		displayOptions: { show: showOnlyForAllMessages },
-		routing: {
-			send: { type: 'body', property: 'store_id' },
-		},
-	},
-	{
 		displayName: 'Number Name or ID',
 		name: 'numberId',
 		type: 'options',
